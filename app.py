@@ -14,7 +14,7 @@ st.markdown(
     """
     <div style="text-align:center; padding: 20px;">
         <h1>✈️ SUPs Job Made Easy</h1>
-        <p style="font-size:18px;">Smart tools for airport supervisors</p>
+        <p style="font-size:18px;">Smart tools for Cathay supervisors</p>
     </div>
     """,
     unsafe_allow_html=True
@@ -42,7 +42,7 @@ with col2:
         """
         <div style="padding:20px; border-radius:15px; border:1px solid #ddd; background-color:#f8f9fa;">
             <h3>✈️ Flight Briefing Sheet</h3>
-            <p>Prepare flight briefing data automatically.</p>
+            <p>Prepare daily flight briefing sheet automatically.</p>
             <b>Status: Coming Soon ⏳</b>
         </div>
         """,
