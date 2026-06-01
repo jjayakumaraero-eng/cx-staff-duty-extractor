@@ -1,6 +1,3 @@
-Replace your full `app.py` with this updated professional version:
-
-```python
 import streamlit as st
 import pandas as pd
 import pdfplumber
@@ -442,6 +439,3 @@ if pdf_file:
                 file_name="cx_staff_date_wise_report.pdf",
                 mime="application/pdf"
             )
-```
-
-Paste this into GitHub `app.py`, commit, and Streamlit should redeploy automatically.
