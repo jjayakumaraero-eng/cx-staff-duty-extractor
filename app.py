@@ -4,7 +4,7 @@ import pdfplumber
 import re
 from fpdf import FPDF
 
-st.title("✈️ CX Duty Sheet Extractor")
+st.title("CX Duty Sheet Extractor")
 
 TARGET_ROLES = [
     "CSA CX",
