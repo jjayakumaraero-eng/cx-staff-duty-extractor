@@ -1,10 +1,72 @@
+Replace your full `app.py` with this updated professional version:
+
+```python
 import streamlit as st
 import pandas as pd
 import pdfplumber
 import re
 from fpdf import FPDF
 
-st.title("CX Duty Sheet Extractor")
+st.set_page_config(
+    page_title="SUPs Job Made Easy",
+    page_icon="✈️",
+    layout="wide"
+)
+
+st.markdown(
+    """
+    <div style="text-align:center; padding: 20px;">
+        <h1>✈️ SUPs Job Made Easy</h1>
+        <p style="font-size:18px;">Smart tools for airport supervisors</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# ---------------------------
+# MAIN FEATURE CARDS
+# ---------------------------
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown(
+        """
+        <div style="padding:20px; border-radius:15px; border:1px solid #ddd; background-color:#f8f9fa;">
+            <h3>🧾 Duty Sheet Extractor</h3>
+            <p>Extract CX staffing, check SLA, and generate reports.</p>
+            <b>Status: Available ✅</b>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col2:
+    st.markdown(
+        """
+        <div style="padding:20px; border-radius:15px; border:1px solid #ddd; background-color:#f8f9fa;">
+            <h3>✈️ Flight Briefing Sheet</h3>
+            <p>Prepare flight briefing data automatically.</p>
+            <b>Status: Coming Soon ⏳</b>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col3:
+    st.markdown(
+        """
+        <div style="padding:20px; border-radius:15px; border:1px solid #ddd; background-color:#f8f9fa;">
+            <h3>👥 Staff Allocator</h3>
+            <p>Allocate staff automatically based on flights and shifts.</p>
+            <b>Status: Coming Soon ⏳</b>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+st.divider()
+
+st.header("🧾 Duty Sheet Extractor")
 
 TARGET_ROLES = [
     "CSA CX",
@@ -134,27 +196,20 @@ def categorise_staff(df):
 
         if is_supervisor and row["Shift Start"] in ["04:15", "04:30"]:
             categories["Early Supervisor"].append(row)
-
         elif is_flight_control and time_to_minutes("04:15") <= start <= time_to_minutes("05:30"):
             categories["Early Flight Controller"].append(row)
-
         elif is_csa and time_to_minutes("04:15") <= start <= time_to_minutes("09:00"):
             categories["Early CSA"].append(row)
-
         elif is_supervisor and time_to_minutes("12:45") <= start <= time_to_minutes("14:30"):
             categories["Late Supervisor"].append(row)
-
         elif is_flight_control and time_to_minutes("12:45") <= start <= time_to_minutes("14:30"):
             categories["Late Flight Controller"].append(row)
-
         elif is_csa and time_to_minutes("12:45") <= start <= time_to_minutes("14:30"):
             categories["Late CSA"].append(row)
 
     return categories
 
 def make_sla_table(grouped):
-    columns = list(DISPLAY_COLUMNS.values())
-
     sla_row = {}
     actual_row = {}
 
@@ -162,10 +217,7 @@ def make_sla_table(grouped):
         sla_row[display_name] = SLA_REQUIREMENTS[category]
         actual_row[display_name] = len(grouped[category])
 
-    return pd.DataFrame(
-        [sla_row, actual_row],
-        index=["SLA", "Actual"]
-    )
+    return pd.DataFrame([sla_row, actual_row], index=["SLA", "Actual"])
 
 def colour_actual_row(dataframe):
     styles = pd.DataFrame("", index=dataframe.index, columns=dataframe.columns)
@@ -194,21 +246,21 @@ def make_numbered_df(rows):
     df = df.reset_index(drop=True)
     df.insert(0, "No", range(1, len(df) + 1))
 
-    wanted_cols = [
-        "No",
-        "Staff Name",
-        "Staff ID",
-        "Role",
-        "Shift Text",
-        "Shift Start",
-        "Shift End",
-        "Absence Start",
-        "Absence End",
-        "Absence Description",
-        "Comments"
+    return df[
+        [
+            "No",
+            "Staff Name",
+            "Staff ID",
+            "Role",
+            "Shift Text",
+            "Shift Start",
+            "Shift End",
+            "Absence Start",
+            "Absence End",
+            "Absence Description",
+            "Comments"
+        ]
     ]
-
-    return df[wanted_cols]
 
 def draw_pdf_sla_table(pdf, grouped):
     sla_table = make_sla_table(grouped)
@@ -226,15 +278,14 @@ def draw_pdf_sla_table(pdf, grouped):
         pdf.cell(col_width, 7, col, border=1, align="C")
     pdf.ln()
 
-    # SLA row
     pdf.cell(row_label_width, 8, "SLA", border=1, align="C")
     pdf.set_font("Arial", "", 9)
+
     for col in sla_table.columns:
         pdf.set_fill_color(255, 255, 255)
         pdf.cell(col_width, 8, str(sla_table.loc["SLA", col]), border=1, align="C", fill=True)
     pdf.ln()
 
-    # Actual row, coloured only
     pdf.set_font("Arial", "B", 9)
     pdf.cell(row_label_width, 8, "Actual", border=1, align="C")
 
@@ -338,10 +389,7 @@ if pdf_file:
             ["All Dates"] + all_dates
         )
 
-        if selected_date == "All Dates":
-            view_df = extracted_df
-        else:
-            view_df = extracted_df[extracted_df["Date"] == selected_date]
+        view_df = extracted_df if selected_date == "All Dates" else extracted_df[extracted_df["Date"] == selected_date]
 
         date_grouped_data = {}
 
@@ -394,3 +442,6 @@ if pdf_file:
                 file_name="cx_staff_date_wise_report.pdf",
                 mime="application/pdf"
             )
+```
+
+Paste this into GitHub `app.py`, commit, and Streamlit should redeploy automatically.
